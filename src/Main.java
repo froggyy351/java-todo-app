@@ -8,7 +8,7 @@ public class Main {
     public static void main(String args[]){
         //タスクを保存するリスト
         List<Task> toDoList = new ArrayList<>();
-        Scanner scanner = new Scanner(System.in, "UTF-8");
+        Scanner scanner = new Scanner(System.in, "Shift-JIS");
         int nextId = 1;
 
         System.out.println("=== Java todo app ===");
