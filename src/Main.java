@@ -17,7 +17,8 @@ public class Main {
             System.out.println("\n--- メニュー ---");
             System.out.println("1. タスクを追加");
             System.out.println("2. タスクを表示");
-            System.out.println("3. 終了");
+            System.out.println("3. タスクを完了にする");
+            System.out.println("4. 終了");
             System.out.println("\n選択してください。 >");
 
             String choice = scanner.nextLine();
@@ -33,6 +34,22 @@ public class Main {
                     System.out.println(task);
                 }
             } else if (choice.equals("3")) {
+                System.out.println("完了にするタスクIDを入力");
+                int targetId = Integer.parseInt(scanner.nextLine());
+
+                boolean found = false;
+                for (Task task : toDoList) {
+                    if (task.getId() == targetId) {
+                        task.markAsDone();
+                        System.out.println("タスク：「" + task.getTitle() + "」を完了にしました！");
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {  //この変数がfalseならって意味になるらしい
+                    System.out.println("ID：" + targetId + "のタスクは見つかりませんでした。");
+                }
+            }else if (choice.equals("4")) {
                 System.out.println("さようなら！");
                 break;  //whileの無限ループから抜ける
             } else {
