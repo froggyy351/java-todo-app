@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -13,8 +16,12 @@ public class Main {
         Scanner scanner = new Scanner(System.in, "Shift-JIS");
         int nextId = 1;
 
+        //tasks.txtを読み込み
+        loadFromFile(toDoList);
+
         System.out.println("=== Java todo app ===");
 
+        //選択式でユーザ操作させる
         while (true){
             System.out.println("\n--- メニュー ---");
             System.out.println("1. タスクを追加");
@@ -74,4 +81,26 @@ public class Main {
         }
     }
 
+    private static void loadFromFile(List<Task> toDoList){
+        File file = new File("tasks.txt");
+        if(!file.exists()) return;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("tasks.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                int id = Integer.parseInt(parts[0]);               
+                String title = parts[1];               
+                boolean isDone = Boolean.parseBoolean(parts[2]);
+                
+                //タスクを復元
+                Task task = new Task(id, title);
+                if(isDone) task.markAsDone();
+                toDoList.add(task);
+            }            
+        } catch (Exception e) {
+            System.out.println("tasks.txt読み込み時にエラーが発生しました" + e.getMessage());
+        }
+
+    }
 }
