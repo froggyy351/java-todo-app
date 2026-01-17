@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -10,11 +11,12 @@ import java.util.Scanner;
 //javac -d bin src/*.java   srcフォルダ配下のjavaファイルを全てコンパイルして、binフォルダへclassファイルを配置
 //java -cp bin Main         実行ファイルはbinフォルダにあるよ～
 public class Main {
+
+    private static int nextId = 1;
     public static void main(String args[]){
         //タスクを保存するリスト
         List<Task> toDoList = new ArrayList<>();
         Scanner scanner = new Scanner(System.in, "Shift-JIS");
-        int nextId = 1;
 
         //tasks.txtを読み込み
         loadFromFile(toDoList);
@@ -35,7 +37,11 @@ public class Main {
             if (choice.equals("1")) {
                 System.out.println("タスクを入力");
                 String title = scanner.nextLine();
-                toDoList.add(new Task(nextId++, title));
+                System.out.println("\n期限を入力（yyyy-mm-dd）");
+                String deadlineString = scanner.nextLine();
+                LocalDate deadline = LocalDate.parse(deadlineString);
+
+                toDoList.add(new Task(nextId++, title, deadline));
                 System.out.println("追加しました！");
             } else if (choice.equals("2")) {
                 System.out.println("\n---現在のタスク---");
@@ -63,7 +69,7 @@ public class Main {
                 System.out.println("さようなら！");
                 break;  //whileの無限ループから抜ける
             } else {
-                System.out.println("1～3で入力してくださいね。");
+                System.out.println("1～4で入力してくださいね。");
             }
         }
         scanner.close();
@@ -73,7 +79,7 @@ public class Main {
     private static void saveToFile(List<Task> toDoList){
         try (PrintWriter writer = new PrintWriter(new FileWriter("tasks.txt"))) {
             for( Task task : toDoList){
-                writer.println(task.getId() + "," + task.getTitle() + "," + task.isDone());
+                writer.println(task.getId() + "," + task.getTitle() + "," + task.isDone() + "," + task.getDeadline() );
             }
             System.out.println("タスクを保存しました。");    
         } catch (Exception e) {
@@ -92,11 +98,15 @@ public class Main {
                 int id = Integer.parseInt(parts[0]);               
                 String title = parts[1];               
                 boolean isDone = Boolean.parseBoolean(parts[2]);
+                LocalDate deadline = LocalDate.parse(parts[3]);
                 
                 //タスクを復元
-                Task task = new Task(id, title);
+                Task task = new Task(id, title, deadline);
                 if(isDone) task.markAsDone();
                 toDoList.add(task);
+
+                //前回の最後に発番したidから連番になるように。
+                nextId = id + 1;
             }            
         } catch (Exception e) {
             System.out.println("tasks.txt読み込み時にエラーが発生しました" + e.getMessage());
