@@ -21,55 +21,56 @@ public class Main {
         //tasks.txtを読み込み
         loadFromFile(toDoList);
 
-        System.out.println("=== Java todo app ===");
-
         //選択式でユーザ操作させる
         while (true){
-            System.out.println("\n--- メニュー ---");
-            System.out.println("1. タスクを追加");
-            System.out.println("2. タスクを表示");
-            System.out.println("3. タスクを完了にする");
-            System.out.println("4. 終了");
-            System.out.println("\n選択してください。 >");
+            System.out.println("\n===============================");
+            System.out.println("   TASK MANAGEMENT SYSTEM v1.0");
+            System.out.println("===============================");
+            System.out.println(" 1. [Create]  Add New Task");
+            System.out.println(" 2. [Read]    List All Tasks");
+            System.out.println(" 3. [Update]  Mark Task as Completed");
+            System.out.println(" 4. [Exit]    Terminate Process");
+            System.out.println("\nSELECT ACTION > ");
 
             String choice = scanner.nextLine();
 
             if (choice.equals("1")) {
-                System.out.println("タスクを入力");
+                System.out.println(">>> [Action: Create] Enter task title:");
                 String title = scanner.nextLine();
-                System.out.println("\n期限を入力（yyyy-mm-dd）");
+                System.out.println("\n>>> Set deadline (yyyy-mm-dd):");
                 String deadlineString = scanner.nextLine();
                 LocalDate deadline = LocalDate.parse(deadlineString);
 
                 toDoList.add(new Task(nextId++, title, deadline));
-                System.out.println("追加しました！");
+                System.out.println("[SUCCESS] New task registered to the database.");
             } else if (choice.equals("2")) {
-                System.out.println("\n---現在のタスク---");
+                System.out.println("\n--- [DISPLAY: CURRENT TASK LIST] ---");
                 for(Task task : toDoList){
                     System.out.println(task);
                 }
             } else if (choice.equals("3")) {
-                System.out.println("完了にするタスクIDを入力");
+                System.out.println(">>> [Action: Update] Enter target Task ID:");
                 int targetId = Integer.parseInt(scanner.nextLine());
 
                 boolean found = false;
                 for (Task task : toDoList) {
                     if (task.getId() == targetId) {
                         task.markAsDone();
-                        System.out.println("タスク：「" + task.getTitle() + "」を完了にしました！");
+                        System.out.println("[SUCCESS] Task ID: " + targetId + " updated to status: DONE.");
                         found = true;
                         break;
                     }
                 }
                 if (!found) {  //この変数がfalseならって意味になるらしい
-                    System.out.println("ID：" + targetId + "のタスクは見つかりませんでした。");
+                    System.out.println("[ERROR] Record not found. ID: " + targetId);
                 }
             }else if (choice.equals("4")) {
                 saveToFile(toDoList);
-                System.out.println("さようなら！");
+                System.out.println("[SYSTEM] Initializing shutdown sequence...");
+                System.out.println("Goodbye.");
                 break;  //whileの無限ループから抜ける
             } else {
-                System.out.println("1～4で入力してくださいね。");
+                System.out.println("[WARNING] Invalid input. Please select from codes 1-4.");
             }
         }
         scanner.close();
@@ -81,9 +82,9 @@ public class Main {
             for( Task task : toDoList){
                 writer.println(task.getId() + "," + task.getTitle() + "," + task.isDone() + "," + task.getDeadline() );
             }
-            System.out.println("タスクを保存しました。");    
+            System.out.println("[INFO] Data persistence complete.");    
         } catch (Exception e) {
-            System.out.println("保存中にエラーが発生しました：" + e.getMessage());
+            System.out.println("[ERROR] Failed to write data to file: " + e.getMessage());
         }
     }
 
@@ -107,9 +108,10 @@ public class Main {
 
                 //前回の最後に発番したidから連番になるように。
                 nextId = id + 1;
+                System.out.println("[INFO] System state restored from " + file.getName());
             }            
         } catch (Exception e) {
-            System.out.println("tasks.txt読み込み時にエラーが発生しました" + e.getMessage());
+            System.out.println("[ERROR] Failed to load data record from " + file.getName() +": " + e.getMessage());
         }
 
     }
