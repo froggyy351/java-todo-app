@@ -1,3 +1,5 @@
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -50,6 +52,7 @@ public class Main {
                     System.out.println("ID：" + targetId + "のタスクは見つかりませんでした。");
                 }
             }else if (choice.equals("4")) {
+                saveToFile(toDoList);
                 System.out.println("さようなら！");
                 break;  //whileの無限ループから抜ける
             } else {
@@ -59,4 +62,16 @@ public class Main {
         scanner.close();
 
     }
+
+    private static void saveToFile(List<Task> toDoList){
+        try (PrintWriter writer = new PrintWriter(new FileWriter("tasks.txt"))) {
+            for( Task task : toDoList){
+                writer.println(task.getId() + "," + task.getTitle() + "," + task.isDone());
+            }
+            System.out.println("タスクを保存しました。");    
+        } catch (Exception e) {
+            System.out.println("保存中にエラーが発生しました：" + e.getMessage());
+        }
+    }
+
 }
