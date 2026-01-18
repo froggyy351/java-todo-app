@@ -10,7 +10,7 @@ public class Task {
     private LocalDate deadline;
 
     //曜日付きの日付型を作るフォーマット用の定数
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd(E)", Locale.JAPANESE);
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd (E)", Locale.JAPANESE);
 
     //可読性の観点から、thisを付けるようにする。クラスのメンバ変数であると目印になって読みやすくなるため。
     //コンストラクタ

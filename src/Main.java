@@ -27,9 +27,10 @@ public class Main {
             System.out.println("   TASK MANAGEMENT SYSTEM v1.0");
             System.out.println("===============================");
             System.out.println(" 1. [Create]  Add New Task");
-            System.out.println(" 2. [Read]    List All Tasks");
+            System.out.println(" 2. [Read]    List Current Tasks");
             System.out.println(" 3. [Update]  Mark Task as Completed");
             System.out.println(" 4. [Exit]    Terminate Process");
+            System.out.println(" 5. [Read]    List All Task History");
             System.out.println("\nSELECT ACTION > ");
 
             String choice = scanner.nextLine();
@@ -45,8 +46,16 @@ public class Main {
                 System.out.println("[SUCCESS] New task registered to the database.");
             } else if (choice.equals("2")) {
                 System.out.println("\n--- [DISPLAY: CURRENT TASK LIST] ---");
+
+                //期限の昇順で表示
+                //期限が同じ場合ID順で表示
+                toDoList.sort(java.util.Comparator.comparing(Task::getDeadline).thenComparing(Task::getId));
+
                 for(Task task : toDoList){
-                    System.out.println(task);
+                    //未完了分のみ表示
+                    if( !task.isDone() ){
+                        System.out.println(task);
+                    }
                 }
             } else if (choice.equals("3")) {
                 System.out.println(">>> [Action: Update] Enter target Task ID:");
@@ -69,6 +78,16 @@ public class Main {
                 System.out.println("[SYSTEM] Initializing shutdown sequence...");
                 System.out.println("Goodbye.");
                 break;  //whileの無限ループから抜ける
+            } else if (choice.equals("5")){
+                System.out.println("\n--- [DISPLAY: ALL TASK HISTORY] ---");
+
+                //期限の昇順で表示
+                //期限が同じ場合ID順で表示
+                toDoList.sort(java.util.Comparator.comparing(Task::getDeadline).thenComparing(Task::getId));
+
+                for(Task task : toDoList){
+                    System.out.println(task);
+                }
             } else {
                 System.out.println("[WARNING] Invalid input. Please select from codes 1-4.");
             }
@@ -108,11 +127,10 @@ public class Main {
 
                 //前回の最後に発番したidから連番になるように
                 nextId = id + 1;
-                System.out.println("[INFO] System state restored from " + file.getName());
-            }            
+            }
+            System.out.println("[INFO] System state restored from " + file.getName());            
         } catch (Exception e) {
             System.out.println("[ERROR] Failed to load data record from " + file.getName() +": " + e.getMessage());
         }
-
     }
 }
