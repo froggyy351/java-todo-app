@@ -29,7 +29,7 @@ public class Main {
             System.out.println(" 1. [Create]  Add New Task");
             System.out.println(" 2. [Read]    List Current Tasks");
             System.out.println(" 3. [Update]  Mark Task as Completed");
-            System.out.println(" 4. [Exit]    Terminate Process");
+            System.out.println(" 4. [Exit]    Save & Terminate Process");
             System.out.println(" 5. [Read]    List All Task History");
             System.out.println("\nSELECT ACTION > ");
 
