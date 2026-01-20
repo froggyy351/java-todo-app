@@ -24,7 +24,7 @@ public class Task {
     }
 
     //タスクの状態を表示しやすくするメソッド
-    //@Overrideは書かなくてもエラーにならない。ただし、書くことでoverrideがうまくできてなければコンパイルエラーになってくれるようになるので、付ける癖付けすべし。
+    //@Overrideは書かなくてもエラーにならない。ただし、書くことでoverrideがうまくできてなければコンパイルエラーになってくれるようになるので、付ける癖付けすべし
     @Override
     public String toString(){
         String status = isDone ? "[済]" : "[未]";  //三項演算子
