@@ -15,12 +15,12 @@ public class Task {
 
     //可読性の観点から、thisを付けるようにする。クラスのメンバ変数であると目印になって読みやすくなるため。
     //コンストラクタ
-    public Task(int id, String title, LocalDate deadline){
+    public Task(int id, String title, LocalDate deadline, String ballOwner){
         this.id = id;
         this.title = title;
         this.isDone = false; //初期設定は未完了
         this.deadline = deadline;
-        this.ballOwner = "ME";
+        this.ballOwner = ballOwner;
     }
 
     //タスクの状態を表示しやすくするメソッド
@@ -28,7 +28,7 @@ public class Task {
     @Override
     public String toString(){
         String status = isDone ? "[済]" : "[未]";  //三項演算子
-        return String.format("ID.%d [%-8s] %s | %s (期限：%s)", id, ballOwner, status, title, deadline.format(FORMATTER)); //%d = digit(整数)、%s = string(文字列)
+        return String.format("ID:%d [%-8s] %s | %s (期限：%s)", id, ballOwner, status, title, deadline.format(FORMATTER)); //%d = digit(整数)、%s = string(文字列)
     }
 
     //完了フラグを切り替えるメソッド
