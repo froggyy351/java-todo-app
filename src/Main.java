@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 //javac -d bin src/*.java   srcフォルダ配下のjavaファイルを全てコンパイルして、binフォルダへclassファイルを配置
-//java -cp bin Main         実行ファイルはbinフォルダにあるよ～
+//java -cp bin Main         実行ファイルはbinフォルダにあるよ
 public class Main {
 
     private static int nextId = 1;
