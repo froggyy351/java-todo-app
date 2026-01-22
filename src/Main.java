@@ -13,6 +13,18 @@ import java.util.Scanner;
 public class Main {
 
     private static int nextId = 1;
+
+    //色の定数
+    public static final String RESET = "\u001b[0m";
+    public static final String RED   = "\u001b[31m";
+    public static final String GREEN = "\u001b[32m";
+    public static final String YELLOW = "\u001b[33m";
+    public static final String BLUE  = "\u001b[34m";
+    public static final String CYAN  = "\u001b[36m";
+    public static final String ORANGE  = "\u001b[38;5;208m"; // 鮮やかなオレンジ（256色拡張）
+    public static final String PINK    = "\u001b[95m";       // 明るいピンク（高輝度マゼンタ）
+    public static final String LIME    = "\u001b[92m";       // 蛍光ライムグリーン
+
     public static void main(String args[]){
         //タスクを保存するリスト
         List<Task> toDoList = new ArrayList<>();
@@ -31,19 +43,19 @@ public class Main {
             System.out.println(" 3. [Update]  Mark Task as Completed");
             System.out.println(" 4. [Exit]    Save & End");
             System.out.println(" 5. [Read]    History");
-            System.out.println("\nSELECT ACTION > ");
+            System.out.println(CYAN + "\nSELECT ACTION > " + RESET);
 
             String choice = scanner.nextLine();
 
             if (choice.equals("1")) {
-                System.out.println(">>> [Action: Create] Enter task title:");
+                System.out.println(BLUE + ">>> [Action: Create] Enter task title:" + RESET);
                 String title = scanner.nextLine();
-                System.out.println("\n>>> Set deadline (yyyy-mm-dd):");
+                System.out.println(BLUE + "\n>>> Set deadline (yyyy-mm-dd):" + RESET);
                 String deadlineString = scanner.nextLine();
                 LocalDate deadline = LocalDate.parse(deadlineString);
 
                 toDoList.add(new Task(nextId++, title, deadline, "ME"));
-                System.out.println("[SUCCESS] New task added.");
+                System.out.println(GREEN + "[SUCCESS] New task added." + RESET);
             } else if (choice.equals("2")) {
                 while(true){
                     System.out.println("\n--- [DISPLAY: TASK LIST] ---");
@@ -52,13 +64,13 @@ public class Main {
                     //期限が同じ場合ID順で表示
                     toDoList.sort(java.util.Comparator.comparing(Task::getDeadline).thenComparing(Task::getId));
 
-                    System.out.println("\n[ MY BALL ]");
+                    System.out.println(PINK + "\n[ MY BALL ]" + RESET);
                     for(Task task : toDoList){
                         if( !task.isDone() && task.getBallOwner().equalsIgnoreCase("ME") ){
                             System.out.println(task);
                         }
                     }
-                    System.out.println("\n[ OTHER BALL ]");
+                    System.out.println(PINK + "\n[ OTHER BALL ]" + RESET);
                     for(Task task : toDoList){
                         if( !task.isDone() && !task.getBallOwner().equalsIgnoreCase("ME") ){
                             System.out.println(task);
@@ -66,7 +78,7 @@ public class Main {
                     }
                     System.out.println("\n-------------------------------------------");
                     System.out.println("CMD: [mID] ME | [ID=Name] Pass to OTHER | [dID] Done | [Enter] Back");
-                    System.out.print("COMMAND > ");
+                    System.out.print(CYAN + "COMMAND > " + RESET);
 
                     String cmd = scanner.nextLine().trim().toLowerCase();
                     if (cmd.isEmpty()) break;
@@ -77,13 +89,13 @@ public class Main {
                             //ラムダ式の矢印、ストリームと呼ばれるベルトコンベアのイメージのやつ、新しめのJavaの書き方らしい。慣れるしかない
                             toDoList.stream().filter(task -> task.getId() == id).findFirst().ifPresent(task -> {
                                 task.markAsDone();
-                                System.out.println(">> Task " + id + " -> DONE" );
+                                System.out.println(GREEN + ">> Task " + id + " -> DONE" + RESET );
                             });
                         } else if(cmd.startsWith("m")) {
                             int id = Integer.parseInt(cmd.substring(1));
                             toDoList.stream().filter(task -> task.getId() == id).findFirst().ifPresent(task -> {
                                 task.setBallOwner("ME");
-                                System.out.println(">> Task " + id + " -> to ME ");
+                                System.out.println(GREEN + ">> Task " + id + " -> to ME " + RESET);
                             });
                         } else if (cmd.contains("=")){
                             String[] parts = cmd.split("=");
@@ -91,38 +103,38 @@ public class Main {
                             String name = parts[1];
                             toDoList.stream().filter(task -> task.getId() == id).findFirst().ifPresent(task -> {
                                 task.setBallOwner(name);
-                                System.out.println(">> Task " + id + "-> to " + name);
+                                System.out.println(GREEN + ">> Task " + id + "-> to " + name + RESET);
                             });
                         } else {
-                            System.out.println(">> Unknown command. Use command [m1], [d1], or [1=Name].");
+                            System.out.println(ORANGE + ">> Unknown command. Use command [m1], [d1], or [1=Name]." + RESET);
                         }
                     } catch (Exception e) {
-                        System.out.println(">> Error: Invalid ID or format.");
+                        System.out.println(RED + ">> Error: Invalid ID or format." + RESET);
                     }
                 }
             } else if (choice.equals("3")) {
-                System.out.println(">>> [Action: Update] Enter target Task ID:");
+                System.out.println(BLUE + ">>> [Action: Update] Enter target Task ID:" + RESET);
                 int targetId = Integer.parseInt(scanner.nextLine());
 
                 boolean found = false;
                 for (Task task : toDoList) {
                     if (task.getId() == targetId) {
                         task.markAsDone();
-                        System.out.println("[SUCCESS] Task ID: " + targetId + " updated to status: DONE.");
+                        System.out.println(GREEN + "[SUCCESS] Task ID: " + targetId + " updated to status: DONE." + RESET);
                         found = true;
                         break;
                     }
                 }
                 if (!found) {  //この変数がfalseならって意味になるらしい
-                    System.out.println("[ERROR] Record not found. ID: " + targetId);
+                    System.out.println(RED + "[ERROR] Record not found. ID: " + targetId + RESET);
                 }
             }else if (choice.equals("4")) {
                 saveToFile(toDoList);
-                System.out.println("[SYSTEM] Initializing shutdown sequence...");
-                System.out.println("Goodbye.");
+                System.out.println(GREEN + "[SYSTEM] Initializing shutdown sequence..." + RESET);
+                System.out.println(GREEN + "Goodbye." + RESET);
                 break;  //whileの無限ループから抜ける
             } else if (choice.equals("5")){
-                System.out.println("\n--- [DISPLAY: ALL TASK HISTORY] ---");
+                System.out.println(PINK + "\n--- [DISPLAY: ALL TASK HISTORY] ---" + RESET);
 
                 //期限の昇順で表示
                 //期限が同じ場合ID順で表示
@@ -132,7 +144,7 @@ public class Main {
                     System.out.println(task);
                 }
             } else {
-                System.out.println("[WARNING] Invalid input. Please select from codes 1-4.");
+                System.out.println(ORANGE + "[WARNING] Invalid input. Please select from codes 1-4." + RESET);
             }
         }
         scanner.close();
@@ -144,9 +156,9 @@ public class Main {
             for( Task task : toDoList){
                 writer.println(task.getId() + "," + task.getTitle() + "," + task.isDone() + "," + task.getDeadline() + "," + task.getBallOwner() );
             }
-            System.out.println("[INFO] Data persistence complete.");    
+            System.out.println(GREEN + "[INFO] Data persistence complete." + RESET);    
         } catch (Exception e) {
-            System.out.println("[ERROR] Failed to write data to file: " + e.getMessage());
+            System.out.println(RED + "[ERROR] Failed to write data to file: " + e.getMessage() + RESET);
         }
     }
 
@@ -173,9 +185,9 @@ public class Main {
                 //前回の最後に発番したidから連番になるように
                 nextId = Math.max(nextId, id + 1);
             }
-            System.out.println("[INFO] System state restored from " + file.getName());            
+            System.out.println(GREEN + "[INFO] System state restored from " + file.getName() + RESET);            
         } catch (Exception e) {
-            System.out.println("[ERROR] Failed to load data record from " + file.getName() +": " + e.getMessage());
+            System.out.println(RED + "[ERROR] Failed to load data record from " + file.getName() +": " + e.getMessage() + RESET);
         }
     }
 }
