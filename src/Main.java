@@ -30,6 +30,18 @@ public class Main {
         List<Task> toDoList = new ArrayList<>();
         Scanner scanner = new Scanner(System.in, "Shift-JIS");
 
+        //出迎えてくれるアスキーアート
+        System.out.println();
+        System.out.println(LIME +"　　　　 ∧,,∧" + RESET);
+        System.out.println(LIME +"　　,,＿(　･ω･)" + RESET);
+        System.out.println(LIME +"　　)　　　　　 ﾌ" + RESET);
+        System.out.println(LIME +"　 /　　　　/ ／" + RESET);
+        System.out.println(LIME +"　/　　ω_ノ_/" + RESET);
+        System.out.println(LIME +"　￣/　|　 " + RESET);
+        System.out.println(LIME +"　　/　 |" + RESET);
+        System.out.println(LIME +"　 (＿_ノ" + RESET);
+        System.out.println();
+
         //tasks.txtを読み込み
         loadFromFile(toDoList);
 
