@@ -48,12 +48,12 @@ public class Main {
         //選択式でユーザ操作させる
         while (true){
             System.out.println("\n===============================");
-            System.out.println("   TASK MANAGEMENT SYSTEM v1.0");
+            System.out.println("   TASK MANAGEMENT SYSTEM v1.1");
             System.out.println("===============================");
-            System.out.println(" 1. [Create]  Add Task");
-            System.out.println(" 2. [Read]    List Task");
+            System.out.println(" 1. [Create]  Add");
+            System.out.println(" 2. [Read]    List");
             System.out.println(" 3. [Update]  Mark Task as Completed");
-            System.out.println(" 4. [Exit]    Save & End");
+            System.out.println(" 4. [Exit]    End");
             System.out.println(" 5. [Read]    History");
             System.out.println(CYAN + "\nSELECT ACTION > " + RESET);
 
@@ -67,6 +67,7 @@ public class Main {
                 LocalDate deadline = LocalDate.parse(deadlineString);
 
                 toDoList.add(new Task(nextId++, title, deadline, "ME"));
+                saveToFile(toDoList);
                 System.out.println(GREEN + "[SUCCESS] New task added." + RESET);
             } else if (choice.equals("2")) {
                 while(true){
@@ -140,6 +141,7 @@ public class Main {
                 if (!found) {  //この変数がfalseならって意味になるらしい
                     System.out.println(RED + "[ERROR] Record not found. ID: " + targetId + RESET);
                 }
+                saveToFile(toDoList);
             }else if (choice.equals("4")) {
                 saveToFile(toDoList);
                 System.out.println(GREEN + "[SYSTEM] Initializing shutdown sequence..." + RESET);
