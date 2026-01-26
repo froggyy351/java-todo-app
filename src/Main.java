@@ -196,7 +196,7 @@ public class Main {
                 if(isDone) task.markAsDone();
                 toDoList.add(task);
 
-                //前回の最後に発番したidから連番になるように
+                //前回の最後に発番したidから連番になるように。
                 nextId = Math.max(nextId, id + 1);
             }
             System.out.println(GREEN + "[INFO] System state restored from " + file.getName() + RESET);            
